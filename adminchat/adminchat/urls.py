@@ -25,7 +25,8 @@ from adminchat.views import (
     CustomTokenObtainPairView,
     DashboardStatsView,
     BotSettingsViewSet,
-    BotTemplateViewSet
+    BotTemplateViewSet,
+    health_check
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.routers import DefaultRouter
@@ -61,7 +62,7 @@ urlpatterns = [
     path('api/dashboard/stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
+    path('api/health/', health_check, name='health-check'),
     # Documentación
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

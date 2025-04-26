@@ -359,3 +359,26 @@ class BotTemplateViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(templates, many=True)
         return Response(serializer.data)
 
+""" @swagger_auto_schema(
+    methods=['get'],
+    operation_description="Endpoint de health check",
+    responses={
+        200: openapi.Response(
+            description="OK",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'status': openapi.Schema(type=openapi.TYPE_STRING)
+                }
+            )
+        )
+    }
+) """
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def health_check(request):
+    """
+    Simple health check endpoint that returns API status.
+    No authentication required.
+    """
+    return Response({'status': 'OK'}, status=status.HTTP_200_OK)
