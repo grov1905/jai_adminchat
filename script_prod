@@ -1,0 +1,97 @@
+En producción, el proceso es similar pero con algunas consideraciones importantes:
+Antes de desplegar:
+Las migraciones ya deben estar creadas en tu repositorio
+No deberías crear nuevas migraciones en producción
+El comando makemigrations no debería ejecutarse en producción
+
+# Aplicar todas las migraciones pendientes
+python manage.py migrate
+
+O si quieres ser más específico:
+
+python manage.py migrate auth
+python manage.py migrate contenttypes
+python manage.py migrate sessions
+python manage.py migrate admin
+python manage.py migrate token_blacklist
+python manage.py migrate adminchat
+
+
+Consideraciones importantes para producción:
+Backup primero:
+# Hacer backup de la base de datos antes de migrar
+   pg_dump -U jai_user -d jai_chatdb > backup_before_migration.sql
+
+Modo mantenimiento:
+Activar modo mantenimiento en tu aplicación
+Detener el tráfico a la base de datos
+Aplicar las migraciones
+Verificar que todo funciona
+Reactivar la aplicación
+En Docker:
+Si estás usando Docker en producción, podrías tener un script de despliegue como:
+
+ # 1. Detener la aplicación
+   docker-compose stop app
+
+   # 2. Hacer backup
+   docker-compose exec db pg_dump -U jai_user -d jai_chatdb > backup.sql
+
+   # 3. Aplicar migraciones
+   docker-compose run --rm app python manage.py migrate
+
+   # 4. Verificar que todo está bien
+   docker-compose run --rm app python manage.py check
+
+   # 5. Reiniciar la aplicación
+   docker-compose up -d
+
+
+Buenas prácticas para producción:
+Pruebas primero: Siempre prueba las migraciones en un ambiente de staging que sea idéntico a producción
+Rollback plan: Ten un plan para revertir las migraciones si algo sale mal
+Monitoreo: Monitorea la aplicación después de aplicar migraciones
+Ventana de mantenimiento: Programa las migraciones en horas de bajo tráfico
+Documentación: Mantén documentación de las migraciones aplicadas
+Ejemplo de script de despliegue seguro:
+
+
+!/bin/bash
+
+# Variables
+APP_NAME="jai_adminchat"
+DB_NAME="jai_chatdb"
+DB_USER="jai_user"
+BACKUP_DIR="/backups"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+# 1. Activar modo mantenimiento
+echo "Activando modo mantenimiento..."
+curl -X POST http://localhost:8000/maintenance/on
+
+# 2. Backup de la base de datos
+echo "Creando backup..."
+docker-compose exec db pg_dump -U $DB_USER -d $DB_NAME > $BACKUP_DIR/backup_${TIMESTAMP}.sql
+
+# 3. Aplicar migraciones
+echo "Aplicando migraciones..."
+docker-compose run --rm app python manage.py migrate
+
+# 4. Verificar la aplicación
+echo "Verificando la aplicación..."
+docker-compose run --rm app python manage.py check
+
+# 5. Desactivar modo mantenimiento
+echo "Desactivando modo mantenimiento..."
+curl -X POST http://localhost:8000/maintenance/off
+
+echo "Despliegue completado!"
+
+
+La diferencia principal entre desarrollo y producción es que en producción:
+No creas nuevas migraciones
+Siempre haces backup primero
+Tienes un plan de rollback
+Aplicas las migraciones en un ambiente controlado
+Monitoreas el proceso
+Tienes una ventana de mantenimiento definida

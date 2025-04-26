@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.test-bg {
+  @apply bg-blue-500 p-4 text-white;
+}
+
+/* Estilo de prueba forzado */
+.test-force-red {
+    background-color: #ef4444 !important;
+    color: white !important;
+    padding: 1rem;
+    text-align: center;
+}
