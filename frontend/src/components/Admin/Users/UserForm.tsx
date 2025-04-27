@@ -1,15 +1,17 @@
 // src/components/Admin/Users/UserForm.tsx
 import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
-import { BusinessUser } from '../../../api/admin/users';
-import { Business, getBusinesses } from '../../../api/admin/business';
-import { getRoles} from '../../../api/admin/roles';
+import { BusinessUser } from '../../../types/businessUser';
+import { getBusinesses } from '../../../api/admin/business';
+import { getRoles } from '../../../api/admin/roles';
 import { Role } from '../../../types/role';
+import { Business } from '../../../types/business';
 
 interface UserFormProps {
   initialData?: BusinessUser | null;
   onSubmit: (data: any) => void;
   isSubmitting: boolean;
+  isSuperuser?: boolean; // Nueva prop
 }
 
 interface UserFormData {
@@ -22,8 +24,8 @@ interface UserFormData {
   is_active: boolean;
 }
 
-const UserForm = ({ initialData, onSubmit, isSubmitting }: UserFormProps) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<UserFormData>({
+const UserForm = ({ initialData, onSubmit, isSubmitting, isSuperuser = false }: UserFormProps) => {
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<UserFormData>({
     defaultValues: initialData ? {
       email: initialData.email,
       full_name: initialData.full_name,
@@ -40,7 +42,8 @@ const UserForm = ({ initialData, onSubmit, isSubmitting }: UserFormProps) => {
   const { data: businesses } = useQuery({
     queryKey: ['businesses'],
     queryFn: () => getBusinesses(1),
-    select: (data) => data.results
+    select: (data) => data.results,
+    enabled: isSuperuser // Solo cargar negocios si es superadmin
   });
 
   const { data: roles } = useQuery({
@@ -48,6 +51,9 @@ const UserForm = ({ initialData, onSubmit, isSubmitting }: UserFormProps) => {
     queryFn: () => getRoles(1),
     select: (data) => data.results
   });
+
+  // Si no es superadmin, usar el business_id del usuario actual
+  const currentBusinessId = initialData?.business?.id || '';
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -68,6 +74,7 @@ const UserForm = ({ initialData, onSubmit, isSubmitting }: UserFormProps) => {
               }
             })}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3 border"
+            disabled={!!initialData} // Deshabilitar para edición
           />
           {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
         </div>
@@ -106,25 +113,32 @@ const UserForm = ({ initialData, onSubmit, isSubmitting }: UserFormProps) => {
           {errors.role_id && <p className="mt-1 text-sm text-red-600">{errors.role_id.message}</p>}
         </div>
 
-        {/* Negocio */}
-        <div>
-          <label htmlFor="business_id" className="block text-sm font-medium text-gray-700">
-            Negocio <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="business_id"
-            {...register('business_id', { required: 'Este campo es requerido' })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3 border"
-          >
-            <option value="">Seleccione un negocio</option>
-            {businesses?.map((business: Business) => (
-              <option key={business.id} value={business.id}>
-                {business.name}
-              </option>
-            ))}
-          </select>
-          {errors.business_id && <p className="mt-1 text-sm text-red-600">{errors.business_id.message}</p>}
-        </div>
+        {/* Negocio - Solo visible para superadmin */}
+        {isSuperuser && (
+          <div>
+            <label htmlFor="business_id" className="block text-sm font-medium text-gray-700">
+              Negocio <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="business_id"
+              {...register('business_id', { required: 'Este campo es requerido' })}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2 px-3 border"
+            >
+              <option value="">Seleccione un negocio</option>
+              {businesses?.map((business: Business) => (
+                <option key={business.id} value={business.id}>
+                  {business.name}
+                </option>
+              ))}
+            </select>
+            {errors.business_id && <p className="mt-1 text-sm text-red-600">{errors.business_id.message}</p>}
+          </div>
+        )}
+
+        {/* Campo oculto para business_id cuando no es superadmin */}
+        {!isSuperuser && (
+          <input type="hidden" {...register('business_id')} value={currentBusinessId} />
+        )}
 
         {/* Teléfono */}
         <div>

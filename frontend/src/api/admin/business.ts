@@ -1,13 +1,7 @@
 // src/api/admin/business.ts
 import api from '../axiosConfig';
+import { Business } from '../../types/business';
 
-export interface Business {
-  id: string;
-  name: string;
-  description?: string;
-  created_at: string;
-  is_active: boolean;
-}
 
 // En tu archivo de tipos o api/admin/business.ts
 export interface PaginatedResponse<T> {

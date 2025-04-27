@@ -242,7 +242,7 @@ class BotSettingsViewSet(viewsets.ModelViewSet):
     """
     queryset = BotSettings.objects.select_related('business')
     serializer_class = BotSettingsSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser | IsBusinessAdmin]
+    permission_classes = [IsAuthenticated, IsAdminUser | IsBusinessAdmin ]
     pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
@@ -305,7 +305,7 @@ class BotTemplateViewSet(viewsets.ModelViewSet):
     """
     queryset = BotTemplate.objects.select_related('business')
     serializer_class = BotTemplateSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser | IsBusinessAdmin]
+    permission_classes = [IsAuthenticated, IsAdminUser | IsBusinessAdmin | IsSameBusinessUser]
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['business', 'type']
@@ -359,21 +359,7 @@ class BotTemplateViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(templates, many=True)
         return Response(serializer.data)
 
-""" @swagger_auto_schema(
-    methods=['get'],
-    operation_description="Endpoint de health check",
-    responses={
-        200: openapi.Response(
-            description="OK",
-            schema=openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    'status': openapi.Schema(type=openapi.TYPE_STRING)
-                }
-            )
-        )
-    }
-) """
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def health_check(request):

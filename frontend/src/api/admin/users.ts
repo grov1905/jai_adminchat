@@ -1,18 +1,5 @@
 import api from '../axiosConfig';
-
-export interface BusinessUser {
-  id: string;
-  email: string;
-  full_name: string;
-  role: { id: string; name: string };
-  business?: {
-    id: string;
-    name: string;
-  };
-  is_active: boolean;
-  created_at: string;
-  phone: string;
-}
+import { BusinessUser} from '../../types/businessUser';
 
 export interface PaginatedUsers {
   count: number;
@@ -29,7 +16,6 @@ export const getUsers = async (page: number = 1, pageSize: number = 10): Promise
     total_pages: Math.ceil(response.data.count / pageSize) // Calcula total_pages si el backend no lo provee
   };
 };
-
 
 export const getUser = async (id: string): Promise<BusinessUser> => {
   const response = await api.get(`/users/${id}/`);

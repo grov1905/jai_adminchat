@@ -1,12 +1,12 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Business } from '../../../api/admin/business';
+import { Business } from '../../../types/business';
 
 interface BusinessFormProps {
   initialData?: Business | null;
   onSubmit: (data: any) => void;
   isSubmitting: boolean;
-}
+}   
 
 const BusinessForm = ({ initialData, onSubmit, isSubmitting }: BusinessFormProps) => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm({

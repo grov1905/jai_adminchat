@@ -1,6 +1,5 @@
-// src/AppRoutes.tsx
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import AdminLayout from './components/Admin/Layout/AdminLayout';
 import LoginPage from './pages/Auth/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -11,10 +10,26 @@ import UserDetailPage from './pages/Admin/Users/[id]';
 import { useAuth } from './contexts/AuthContext';
 import RolesPage from './pages/Admin/Roles/RolesPage';
 import RoleDetailPage from './pages/Admin/Roles/[id]';
+import BotSettingsPage from './pages/Admin/BotSettings/BotSettingsPage';
+import BotSettingDetailPage from './pages/Admin/BotSettings/[id]';
+import BotTemplatesPage from './pages/Admin/BotTemplates/BotTemplatesPage';
+import BotTemplateDetailPage from './pages/Admin/BotTemplates/[id]';
+
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
-  const { token } = useAuth();
-  return token ? children : <Navigate to="/login" replace />;
+  const { token, user, fetchUserData } = useAuth();
+  
+  useEffect(() => {
+    if (token && !user) {
+      fetchUserData(token);
+    }
+  }, [token, user, fetchUserData]);
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 };
 
 const router = createBrowserRouter([
@@ -52,6 +67,40 @@ const router = createBrowserRouter([
           {
             path: ':id',
             element: <BusinessDetailPage key="edit"/>,
+          },
+        ],
+      },
+      {
+        path: 'bot-settings',
+        children: [
+          {
+            index: true,
+            element: <BotSettingsPage />,
+          },
+          {
+            path: 'new',
+            element: <BotSettingDetailPage key="create" />,
+          },
+          {
+            path: ':id',
+            element: <BotSettingDetailPage key="edit" />,
+          },
+        ],
+      },
+      {
+        path: 'bot-templates',
+        children: [
+          {
+            index: true,
+            element: <BotTemplatesPage />,
+          },
+          {
+            path: 'new',
+            element: <BotTemplateDetailPage key="create" />,
+          },
+          {
+            path: ':id',
+            element: <BotTemplateDetailPage key="edit" />,
           },
         ],
       },

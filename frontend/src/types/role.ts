@@ -13,3 +13,4 @@ export interface Role {
     previous: string | null;
     results: Role[];
   }
+

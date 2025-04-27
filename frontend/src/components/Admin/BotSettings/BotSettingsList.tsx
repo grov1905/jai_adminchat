@@ -1,22 +1,22 @@
+import { BotSetting } from '../../../types/botSettings';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
-import { Business } from '../../../types/business';
 
-interface BusinessListProps {
-  businesses: Business[];
+interface BotSettingsListProps {
+  settings: BotSetting[];
   onDelete: (id: string) => void;
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
-const BusinessList = ({
-  businesses,
+const BotSettingsList = ({
+  settings,
   onDelete,
   currentPage,
   totalPages,
   onPageChange,
-}: BusinessListProps) => {
+}: BotSettingsListProps) => {
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="overflow-x-auto">
@@ -24,13 +24,13 @@ const BusinessList = ({
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Nombre
+                Negocio
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Estado
+                Modelo LLM
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Fecha Creación
+                Última Actualización
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Acciones
@@ -38,35 +38,27 @@ const BusinessList = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {businesses.length > 0 ? (
-              businesses.map((business) => (
-                <tr key={business.id}>
+            {settings.length > 0 ? (
+              settings.map((setting) => (
+                <tr key={setting.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {business.name}
+                    {setting.business.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        business.is_active
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
-                    >
-                      {business.is_active ? 'Activo' : 'Inactivo'}
-                    </span>
+                    {setting.llm_model_name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(business.created_at).toLocaleDateString()}
+                    {new Date(setting.updated_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link
-                    to={`/admin/business/${business.id}`}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
-                  >
-                    Editar
-                  </Link>
+                    <Link
+                      to={`/admin/bot-settings/${setting.id}`}
+                      className="text-blue-600 hover:text-blue-900 mr-4"
+                    >
+                      Editar
+                    </Link>
                     <button
-                      onClick={() => onDelete(business.id)}
+                      onClick={() => onDelete(setting.id)}
                       className="text-red-600 hover:text-red-900"
                     >
                       Eliminar
@@ -77,7 +69,7 @@ const BusinessList = ({
             ) : (
               <tr>
                 <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
-                  No se encontraron negocios
+                  No se encontraron configuraciones
                 </td>
               </tr>
             )}
@@ -85,7 +77,6 @@ const BusinessList = ({
         </table>
       </div>
 
-      {/* Paginación mejorada */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
           <div className="flex flex-1 justify-between sm:hidden">
@@ -109,9 +100,9 @@ const BusinessList = ({
               <p className="text-sm text-gray-700">
                 Mostrando <span className="font-medium">{(currentPage - 1) * 10 + 1}</span> a{' '}
                 <span className="font-medium">
-                  {Math.min(currentPage * 10, businesses.length + (currentPage - 1) * 10)}
+                  {Math.min(currentPage * 10, settings.length + (currentPage - 1) * 10)}
                 </span>{' '}
-                de <span className="font-medium">{businesses.length + (currentPage - 1) * 10}</span> resultados
+                de <span className="font-medium">{settings.length + (currentPage - 1) * 10}</span> resultados
               </p>
             </div>
             <div>
@@ -168,4 +159,4 @@ const BusinessList = ({
   );
 };
 
-export default BusinessList;
+export default BotSettingsList;
