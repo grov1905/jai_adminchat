@@ -1,6 +1,11 @@
+// src/components/Admin/BotTemplates/BotTemplateForm.tsx
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { BotTemplate, BotTemplateType } from '../../../types/botTemplates';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useQuery } from '@tanstack/react-query';
+import { getBusinesses } from '../../../api/admin/business';
+import { Business } from '../../../types/business';
 
 interface BotTemplateFormProps {
   initialData?: BotTemplate | null;
@@ -17,9 +22,18 @@ const templateTypes: {value: BotTemplateType; label: string}[] = [
 ];
 
 const BotTemplateForm = ({ initialData, onSubmit, isSubmitting }: BotTemplateFormProps) => {
-  const { register, handleSubmit, formState: { errors }, reset, watch } = useForm({
+  const { user, isSuperuser } = useAuth();
+  
+  // Obtener lista de negocios solo para superusuarios
+  const { data: businesses } = useQuery({
+    queryKey: ['businesses'],
+    queryFn: () => getBusinesses(),
+    enabled: isSuperuser,
+  });
+
+  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
     defaultValues: {
-      business_id: '',
+      business_id: user?.business?.id || '',
       name: '',
       type: 'greeting' as BotTemplateType,
       prompt_template: '',
@@ -33,19 +47,23 @@ const BotTemplateForm = ({ initialData, onSubmit, isSubmitting }: BotTemplateFor
   });
 
   React.useEffect(() => {
+    // Establecer el business_id del usuario si no es superusuario
+    if (!isSuperuser && user?.business?.id) {
+      setValue('business_id', user.business.id);
+    }
+
     reset({
-      business_id: '',
-      name: '',
-      type: 'greeting',
-      prompt_template: '',
-      temperature: 0.7,
-      top_p: 0.9,
-      top_k: 50,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-      ...initialData
+      business_id: isSuperuser ? initialData?.business_id || '' : user?.business?.id || '',
+      name: initialData?.name || '',
+      type: initialData?.type || 'greeting',
+      prompt_template: initialData?.prompt_template || '',
+      temperature: initialData?.temperature || 0.7,
+      top_p: initialData?.top_p || 0.9,
+      top_k: initialData?.top_k || 50,
+      frequency_penalty: initialData?.frequency_penalty || 0,
+      presence_penalty: initialData?.presence_penalty || 0,
     });
-  }, [initialData, reset]);
+  }, [initialData, reset, isSuperuser, user, setValue]);
 
   const currentType = watch('type');
 
@@ -58,6 +76,48 @@ const BotTemplateForm = ({ initialData, onSubmit, isSubmitting }: BotTemplateFor
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Campo Negocio */}
+        <div className="md:col-span-2">
+          <label htmlFor="business_id" className="block text-sm font-roboto font-medium text-primary mb-1">
+            Negocio {!isSuperuser && '(Asignado)'}
+          </label>
+          
+          {isSuperuser ? (
+            <>
+              <select
+                id="business_id"
+                {...register('business_id', { required: 'Este campo es requerido' })}
+                className={`mt-1 block w-full rounded-md bg-white px-3 py-2 border ${
+                  errors.business_id 
+                    ? 'border-red-500 focus:ring-red-200' 
+                    : 'border-gray-border hover:border-gray-400 focus:border-primary-light focus:ring-primary-light/50'
+                } shadow-sm focus:ring-2 focus:outline-none transition-colors duration-200`}
+                disabled={isSubmitting}
+              >
+                <option value="">Seleccionar negocio</option>
+                {businesses?.results?.map((business: Business) => (
+                  <option key={business.id} value={business.id}>
+                    {business.name}
+                  </option>
+                ))}
+              </select>
+              {errors.business_id && (
+                <p className="mt-1 text-xs font-roboto text-red-500 animate-fadeIn">
+                  {errors.business_id.message}
+                </p>
+              )}
+            </>
+          ) : (
+            <div className="mt-1 block w-full rounded-md bg-gray-100 px-3 py-2 border border-gray-300">
+              {user?.business?.name || 'No asignado'}
+              <input
+                type="hidden"
+                {...register('business_id')}
+              />
+            </div>
+          )}
+        </div>
+
         <div>
           <label htmlFor="name" className="block text-sm font-roboto font-medium text-primary mb-1">
             Nombre *
@@ -80,6 +140,7 @@ const BotTemplateForm = ({ initialData, onSubmit, isSubmitting }: BotTemplateFor
           )}
         </div>
 
+        {/* Resto del formulario se mantiene igual... */}
         <div>
           <label htmlFor="type" className="block text-sm font-roboto font-medium text-primary mb-1">
             Tipo *

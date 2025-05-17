@@ -1,3 +1,4 @@
+// frontend/src/pages/Admin/BotSettings/[id].tsx
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getBotSetting, updateBotSetting, createBotSetting } from '../../../api/admin/botSettings';

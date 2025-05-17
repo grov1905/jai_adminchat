@@ -1,3 +1,4 @@
+// frontend/src/AppRoutes.tsx
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { ReactNode, useEffect } from 'react';
 import AdminLayout from './components/Admin/Layout/AdminLayout';
@@ -14,7 +15,16 @@ import BotSettingsPage from './pages/Admin/BotSettings/BotSettingsPage';
 import BotSettingDetailPage from './pages/Admin/BotSettings/[id]';
 import BotTemplatesPage from './pages/Admin/BotTemplates/BotTemplatesPage';
 import BotTemplateDetailPage from './pages/Admin/BotTemplates/[id]';
-
+import ChunkingSettingsPage from './pages/Admin/ChunkingSettings/ChunkingSettingsPage';
+import ChunkingSettingDetailPage from './pages/Admin/ChunkingSettings/[id]';
+import ProductsServicesPage from './pages/Admin/ProductsServices/ProductsServicesPage';
+import ProductServiceDetailPage from './pages/Admin/ProductsServices/[id]';
+import DocumentsPage from './pages/Admin/Documents/DocumentsPage';
+import DocumentDetailPage from './pages/Admin/Documents/[id]';
+import ApiRouteDetailPage from './pages/Admin/ApiRoute/[id]';
+import ExternalApiConfigPage from './pages/Admin/ExternalApiConfig/ExternalApiConfigPage';
+import ExternalApiConfigDetailPage from './pages/Admin/ExternalApiConfig/[id]';
+import ApiRoutePage from './pages/Admin/ApiRoute/ApiRoutePage'; 
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { token, user, fetchUserData } = useAuth();
@@ -88,6 +98,23 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'chunking-settings',
+        children: [
+          {
+            index: true,
+            element: <ChunkingSettingsPage />,
+          },
+          {
+            path: 'new',
+            element: <ChunkingSettingDetailPage key="create" />,
+          },
+          {
+            path: ':id',
+            element: <ChunkingSettingDetailPage key="edit" />,
+          },
+        ],
+      },
+      {
         path: 'bot-templates',
         children: [
           {
@@ -135,6 +162,74 @@ const router = createBrowserRouter([
           {
             path: ':id',
             element: <UserDetailPage />,
+          },
+        ],
+      },
+      {
+        path: 'documents',
+        children: [
+          {
+            index: true,
+            element: <DocumentsPage />,
+          },
+          {
+            path: 'new',
+            element: <DocumentDetailPage key="create" />,
+          },
+          {
+            path: ':id',
+            element: <DocumentDetailPage key="edit" />,
+          },
+        ],
+      },
+      {
+        path: 'products-services',
+        children: [
+          {
+            index: true,
+            element: <ProductsServicesPage />,
+          },
+          {
+            path: 'new',
+            element: <ProductServiceDetailPage key="create" />,
+          },
+          {
+            path: ':id',
+            element: <ProductServiceDetailPage key="edit" />,
+          },
+        ],
+      },
+      {
+        path: 'external-api-configs',
+        children: [
+          {
+            index: true,
+            element: <ExternalApiConfigPage />,
+          },
+          {
+            path: 'new',
+            element: <ExternalApiConfigDetailPage key="create" />,
+          },
+          {
+            path: ':id',
+            element: <ExternalApiConfigDetailPage key="edit" />,
+          },
+        ],
+      },
+      {
+        path: 'api-routes',
+        children: [
+          {
+            index: true,
+            element: <ApiRoutePage />,
+          },
+          {
+            path: 'new',
+            element: <ApiRouteDetailPage key="create" />,
+          },
+          {
+            path: ':id',
+            element: <ApiRouteDetailPage key="edit" />,
           },
         ],
       },

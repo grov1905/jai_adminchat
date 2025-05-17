@@ -1,3 +1,4 @@
+#adminchat/Dockerfile
 FROM python:3.11-slim-bullseye
 
 # Establecer variables de entorno para Python

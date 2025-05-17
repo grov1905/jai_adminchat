@@ -1,3 +1,4 @@
+// frontend/src/components/Admin/Layout/AdminLayout.tsx
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useAuth } from '../../../contexts/AuthContext';

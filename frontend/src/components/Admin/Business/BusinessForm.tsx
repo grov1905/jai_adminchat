@@ -1,3 +1,4 @@
+// src/components/Admin/Business/BusinessForm.tsx
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Business } from '../../../types/business';

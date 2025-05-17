@@ -1,3 +1,4 @@
+// frontend/src/api/admin/botSettings.ts
 import api from '../axiosConfig';
 import { BotSetting, BotSettingsResponse } from '../../types/botSettings';
 

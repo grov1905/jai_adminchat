@@ -7,6 +7,7 @@ export interface BotSetting {
   business: Business;
   llm_model_name: string;
   embedding_model_name: string;
+  embedding_dim: string;
   sentiment_model_name: string;
   intent_model_name: string;
   search_top_k: number;

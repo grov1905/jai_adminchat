@@ -1,22 +1,7 @@
-"""
-URL configuration for adminchat project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
+# adminchat/urls.py
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from adminchat.views import (
     BusinessViewSet,
     BusinessUserViewSet,
@@ -26,7 +11,16 @@ from adminchat.views import (
     DashboardStatsView,
     BotSettingsViewSet,
     BotTemplateViewSet,
-    health_check
+    health_check,
+    ChunkingSettingsViewSet,
+    ExternalAPIConfigViewSet,
+    APIRouteViewSet,
+    GatewayView,
+    ProductServiceItemViewSet,
+    DocumentViewSet,
+    EmbeddingViewSet,
+    TaskStatusView
+    
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.routers import DefaultRouter
@@ -56,16 +50,31 @@ router.register(r'api/activity-logs', UserActivityLogViewSet, basename='activity
 # Añadir estas líneas después de la creación del router
 router.register(r'api/bot-settings', BotSettingsViewSet, basename='bot-settings')
 router.register(r'api/bot-templates', BotTemplateViewSet, basename='bot-template')
+router.register(r'api/chunking-settings', ChunkingSettingsViewSet, basename='chunking-settings')
+router.register(r'api/external-api-configs', ExternalAPIConfigViewSet, basename='external-api-configs')
+router.register(r'api/api-routes', APIRouteViewSet, basename='api-routes')
+router.register(r'api/product-service-items', ProductServiceItemViewSet, basename='product-service-item')
+router.register(r'api/documents', DocumentViewSet, basename='document')
+router.register(r'api/embeddings', EmbeddingViewSet, basename='embedding')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/dashboard/stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
+    path('api/tasks/<uuid:task_id>/status/', TaskStatusView.as_view(), name='task-status'),
+
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/health/', health_check, name='health-check'),
+#    path('api/chunking-settings', ChunkingSettingsViewSet, name='chunking-settings'),
+#    path('api/embeddings', EmbeddingViewSet, name='embedding'),
+
+
     # Documentación
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+     # Endpoint de proxy
+    re_path(r'^api/gateway/(?P<path>.*)$', GatewayView.as_view()),
+
 ] + router.urls
 

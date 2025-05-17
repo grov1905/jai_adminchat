@@ -1,3 +1,5 @@
+// frontend/src/api/admin/auth.ts
+
 import api from '../axiosConfig';
 
 export const loginUser = async (credentials: { email: string; password: string }) => {

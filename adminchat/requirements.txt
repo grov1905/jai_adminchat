@@ -1,3 +1,4 @@
+#adminchat/requirements.txt
 django==4.2.0
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
@@ -9,3 +10,15 @@ python-dotenv==1.0.1
 psycopg2-binary==2.9.9
 Pillow
 drf-yasg==1.21.7
+requests
+boto3
+PyPDF2
+openpyxl
+python-docx 
+pgvector
+psycopg2-binary
+numpy>=1.20.0           # Dependencia de pgvector
+celery==5.3.6
+redis==4.6.0
+
+django-celery-results==2.5.1

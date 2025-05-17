@@ -1,3 +1,4 @@
+// src/types/business.ts
 export interface Business {
     id: string;
     name: string;
@@ -10,4 +11,3 @@ export interface Business {
     address?: string | null;
   }
 
-  

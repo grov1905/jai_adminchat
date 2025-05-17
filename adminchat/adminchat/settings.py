@@ -29,7 +29,14 @@ SECRET_KEY = "django-insecure-(2%e&@lw@+(^1q=3sygas3-a8p=u($8)8$ktpwdgt6lfu9+o=e
 DEBUG = config('DEBUG', cast=bool, default=False)
 #SECRET_KEY = config('SECRET_KEY')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'adminchat',  # Nombre del servicio en Docker
+    'embedder.local',
+    'host.docker.internal',  # Otro servicio si es necesario
+    # Agrega aquí cualquier otro host que necesites
+]
 
 
 # Application definition
@@ -45,6 +52,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'django.contrib.postgres',  # Requerido para campos especiales
+    'pgvector.django',      
     'adminchat',
     'drf_yasg',
 ]
@@ -182,11 +191,23 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
+    "http://adminchat:8000",
 ]
 CORS_EXPOSE_HEADERS = ['authorization']  # Asegura que el header sea accesible
 
 # Configuración de drf-yasg
 SWAGGER_SETTINGS = {
+     'DEFAULT_FIELD_INSPECTORS': [
+        'drf_yasg.inspectors.CamelCaseJSONFilter',
+        'drf_yasg.inspectors.ReferencingSerializerInspector',
+        'drf_yasg.inspectors.RelatedFieldInspector',
+        'drf_yasg.inspectors.ChoiceFieldInspector',
+        'drf_yasg.inspectors.FileFieldInspector',  # Inspector específico para archivos
+        'drf_yasg.inspectors.DictFieldInspector',
+        'drf_yasg.inspectors.SimpleFieldInspector',
+    ],
+    'DEFAULT_FILTER_INSPECTORS': [],
+    'DEFAULT_INFO': 'adminchat.urls.swagger_info',  # Esta es la línea clave que falta
     'DEFAULT_GENERATOR_CLASS': 'drf_yasg.generators.OpenAPISchemaGenerator',
     'SECURITY_DEFINITIONS': {
         'Bearer': {
@@ -209,3 +230,21 @@ REDOC_SETTINGS = {
     'EXPAND_RESPONSES': 'all',
     'STATIC_URL': '/static/drf-yasg/',
 }
+
+
+
+
+
+# Configuración de S3
+STORAGE_TYPE = config('STORAGE_TYPE', 's3')
+STORAGE_PATH = config('STORAGE_PATH', 's3://jai-docs-storage/documents/')
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_REGION = config('AWS_REGION', 'us-west-2')
+S3_BUCKET = config('S3_BUCKET', 'jai-docs-storage')
+
+# Configuración adicional para S3
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_DEFAULT_ACL = 'private'

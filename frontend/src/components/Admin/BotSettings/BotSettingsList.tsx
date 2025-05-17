@@ -1,3 +1,4 @@
+// frontend/src/components/Admin/BotSettings/BotSettingsList.tsx
 import { BotSetting } from '../../../types/botSettings';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';

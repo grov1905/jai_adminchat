@@ -1,3 +1,4 @@
+# docker-compose.yml
 services:
   db:
     image: ankane/pgvector:v0.5.1  # Versión optimizada para ARM
@@ -36,7 +37,7 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
       interval: 10s
-      timeout: 5s
+      timeout: 5s 
       retries: 3
       start_period: 30s
     volumes:
@@ -57,9 +58,82 @@ services:
     depends_on:
       adminchat:
         condition: service_healthy
+      embedder.local:
+        condition: service_started
     networks:
       - chat-network
     
+
+  embedder.local:
+    build: ../jai_embedder  # Asegúrate que esta ruta sea correcta
+    hostname: embedder.local 
+    env_file:
+      - .env  # Comparte las mismas variables de entorno
+    environment:
+      - PGHOST=db  # Usa el servicio db definido en tu compose
+      - PGPORT=5432
+      - PGUSER=${PGUSER}
+      - PGPASSWORD=${PGPASSWORD}
+      - PGDATABASE=${PGDATABASE}
+      - EMBEDDING_MODEL=BAAI/bge-large-en
+    ports:
+      - "8001:8000"  # Expone en un puerto diferente
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - chat-network  # Misma red que los otros servicios
+
+    volumes:
+      - ../jai_embedder/app:/app/app  # Monta el código
+      - embeddings_cache:/app/cache  # Usa el volumen existente
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 2G  # Ajusta según necesidades
+
+  redis:  # Servicio de Redis (requerido para Celery)
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - chat-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+  celery_worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    command: >
+      bash -c "sleep 5 &&  
+      celery -A adminchat.celery worker --loglevel=info"
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - chat-network
+    environment:
+      - DJANGO_SETTINGS_MODULE=adminchat.settings
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - PYTHONPATH=/app  # Asegúrate que esté definido
+    volumes:
+      - ./adminchat/adminchat:/app/adminchat  # Monta solo el módulo Python
+      - ./adminchat/manage.py:/app/manage.py  # Monta manage.py
+    restart: unless-stopped
+
+
 networks:
   chat-network:
     driver: bridge

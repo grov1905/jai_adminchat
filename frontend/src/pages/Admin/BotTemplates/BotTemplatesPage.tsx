@@ -27,6 +27,7 @@ const BotTemplatesPage = () => {
     enabled: !!user, // Solo ejecutar si hay usuario autenticado
   });
 
+  
   const deleteMutation = useMutation({
     mutationFn: deleteBotTemplate,
     onSuccess: () => {
@@ -47,14 +48,14 @@ const BotTemplatesPage = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Plantillas del Bot</h1>
-        {businessId && (
+       
           <Link
             to="/admin/bot-templates/new"
             className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-light"
           >
             Crear Plantilla
           </Link>
-        )}
+        
       </div>
 
       {/* Filtro por tipo de plantilla */}

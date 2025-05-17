@@ -4,85 +4,21 @@ jai_adminchat/
 ├── .env
 ├── .python-version
 ├── docker-compose.yml
-├── frontend/
-│   ├── tsconfig.node.json
-│   ├── tailwind.config.js
-│   ├── tsconfig.app.json
-│   ├── tailwind.css
-│   ├── package.json
-│   ├── .env
-│   ├── tsconfig.json
-│   ├── eslint.config.js
-│   ├── vite.config.ts
-│   ├── postcss.config.js
-│   ├── public/
-│   ├── src/
-│   │   ├── App.tsx
-│   │   ├── main.tsx
-│   │   ├── styles.css
-│   │   ├── App.css
-│   │   ├── index.css
-│   │   ├── tailwind.css
-│   │   ├── vite-env.d.ts
-│   │   ├── AppRoutes.tsx
-│   │   ├── types/
-│   │   │   ├── dashboard.ts
-│   │   │   ├── role.ts
-│   │   ├── contexts/
-│   │   │   ├── AuthContext.tsx
-│   │   ├── components/
-│   │   │   ├── DashboardStats.tsx
-│   │   │   ├── StatItem.tsx
-│   │   │   ├── Admin/
-│   │   │   │   ├── Layout/
-│   │   │   │   │   ├── AdminLayout.tsx
-│   │   │   │   │   ├── Sidebar.tsx
-│   │   │   │   ├── Business/
-│   │   │   │   │   ├── BusinessList.tsx
-│   │   │   │   │   ├── BusinessForm.tsx
-│   │   │   │   ├── Roles/
-│   │   │   │   │   ├── RoleForm.tsx
-│   │   │   │   │   ├── RoleList.tsx
-│   │   │   │   ├── Users/
-│   │   │   │   │   ├── UserForm.tsx
-│   │   │   │   │   ├── UserList.tsx
-│   │   ├── hooks/
-│   │   │   ├── useDashboardStats.ts
-│   │   ├── api/
-│   │   │   ├── axiosConfig.ts
-│   │   │   ├── admin/
-│   │   │   │   ├── business.ts
-│   │   │   │   ├── dashboard.ts
-│   │   │   │   ├── roles.ts
-│   │   │   │   ├── users.ts
-│   │   │   │   ├── auth.ts
-│   │   ├── assets/
-│   │   │   ├── logo.png
-│   │   ├── pages/
-│   │   │   ├── DashboardPage.tsx
-│   │   │   ├── Auth/
-│   │   │   │   ├── LoginPage.tsx
-│   │   │   ├── Admin/
-│   │   │   │   ├── Business/
-│   │   │   │   │   ├── [id].tsx
-│   │   │   │   │   ├── BusinessPage.tsx
-│   │   │   │   ├── Roles/
-│   │   │   │   │   ├── [id].tsx
-│   │   │   │   │   ├── RolesPage.tsx
-│   │   │   │   ├── Users/
-│   │   │   │   │   ├── UsersPage.tsx
-│   │   │   │   │   ├── [id].tsx
 ├── adminchat/
 │   ├── requirements.txt
 │   ├──  Dockerfile
 │   ├── manage.py
+│   ├── deploy/
+│   │   ├── nginx.conf
 │   ├── adminchat/
 │   │   ├── signals.py
+│   │   ├── tasks.py
 │   │   ├──  models.py
 │   │   ├── asgi.py
 │   │   ├── serializers.py
 │   │   ├── apps.py
 │   │   ├── admin.py
+│   │   ├── celery.py
 │   │   ├──  settings.py
 │   │   ├── permissions.py
 │   │   ├── pagination.py
@@ -90,3 +26,5 @@ jai_adminchat/
 │   │   ├── views.py
 │   │   ├── managers.py
 │   │   ├── wsgi.py
+├── worker/
+│   ├──  Dockerfile

@@ -1,3 +1,4 @@
+// frontend/src/components/Admin/BotSettings/BotSettingForm.tsx
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { BotSetting } from '../../../types/botSettings';
@@ -27,6 +28,7 @@ const BotSettingForm = ({ initialData, onSubmit, isSubmitting }: BotSettingFormP
       business_id: user?.business?.id || '',
       llm_model_name: '',
       embedding_model_name: '',
+      embedding_dim: '',
       sentiment_model_name: '',
       intent_model_name: '',
       search_top_k: 5,
@@ -50,6 +52,7 @@ const BotSettingForm = ({ initialData, onSubmit, isSubmitting }: BotSettingFormP
       business_id: isSuperuser ? initialData?.business_id || '' : user?.business?.id || '',
       llm_model_name: initialData?.llm_model_name || '',
       embedding_model_name: initialData?.embedding_model_name || '',
+      embedding_dim: initialData?.embedding_dim || '',
       sentiment_model_name: initialData?.sentiment_model_name || '',
       intent_model_name: initialData?.intent_model_name || '',
       search_top_k: initialData?.search_top_k || 5,
@@ -186,6 +189,32 @@ const BotSettingForm = ({ initialData, onSubmit, isSubmitting }: BotSettingFormP
             placeholder="Opcional"
           />
         </div>
+
+
+        {/* Dimensión del embedding */}
+        {/* Modelo de Embedding */}
+        <div>
+          <label htmlFor="embedding_dim" className="block text-sm font-roboto font-medium text-primary mb-1">
+            Dimensión del embedding *
+          </label>
+          <input
+            type="text"
+            id="embedding_dim"
+            {...register('embedding_dim', { required: 'Este campo es requerido' })}
+            className={`mt-1 block w-full rounded-md bg-white px-3 py-2 border ${
+              errors.embedding_dim 
+                ? 'border-red-500 focus:ring-red-200' 
+                : 'border-gray-border hover:border-gray-400 focus:border-primary-light focus:ring-primary-light/50'
+            } shadow-sm focus:ring-2 focus:outline-none transition-colors duration-200 placeholder:text-gray-400`}
+            placeholder="Ej: 1024"
+          />
+          {errors.embedding_dim && (
+            <p className="mt-1 text-xs font-roboto text-red-500 animate-fadeIn">
+              {errors.embedding_dim.message}
+            </p>
+          )}
+        </div>
+
 
         {/* Top K para búsqueda */}
         <div>
