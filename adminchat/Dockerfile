@@ -29,11 +29,10 @@ RUN mkdir -p /app/staticfiles && \
     python manage.py collectstatic --noinput
 
 # Configura Nginx para servir static files
-COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
+#COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Puerto expuesto
 EXPOSE 8000
 
 # Comando de inicio
-CMD ["bash", "-c", "python manage.py migrate && \
-     gunicorn --bind 0.0.0.0:8000 --workers 4 --timeout 120 adminchat.wsgi:application"]
+CMD ["gunicorn --bind 0.0.0.0:8000 --workers 4 --timeout 120 adminchat.wsgi:application"]
