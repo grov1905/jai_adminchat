@@ -7,7 +7,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "dev": "vite",
-    "build": "node node_modules/tailwindcss/lib/cli.js -i ./src/tailwind.css -o ./src/styles.css --minify",
+    "build": "vite build && tailwindcss -i ./src/tailwind.css -o ./dist/styles.css --minify",
     "tailwind:build": "npx tailwindcss -i ./src/tailwind.css -o ./src/styles.css",
     "tailwind:watch": "npx tailwindcss -i ./src/tailwind.css -o ./src/styles.css --watch"
   },
@@ -49,3 +49,4 @@
     "vite": "^6.3.3"
   }
 }
+

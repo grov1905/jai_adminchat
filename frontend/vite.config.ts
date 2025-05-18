@@ -1,3 +1,4 @@
+//frontend/vite.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from 'tailwindcss';
@@ -15,6 +16,15 @@ export default defineConfig({
         tailwindcss,  // ✅ Necesario para Tailwind
         autoprefixer // ✅ Recomendado para compatibilidad
       ]
+    }
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
     }
   }
 });
