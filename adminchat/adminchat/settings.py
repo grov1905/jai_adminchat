@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,11 +123,11 @@ WSGI_APPLICATION = "adminchat.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': "django.db.backends.postgresql", 
-        'NAME': config('PGDATABASE'),
-        'USER': config('PGUSER'),
-        'PASSWORD': config('PGPASSWORD'),
-        'HOST': config('PGHOST', default='localhost'),
-        'PORT': config('PGPORT', default='5432', cast=int),
+        'NAME': os.getenv('PGDATABASE'),
+        'USER': os.getenv('PGUSER'),
+        'PASSWORD': os.getenv('PGPASSWORD'),
+        'HOST': os.getenv('PGHOST', default='localhost'),
+        'PORT': os.getenv('PGPORT', default='5432', cast=int),
         'OPTIONS': {
             'client_encoding': 'UTF8',
         },
