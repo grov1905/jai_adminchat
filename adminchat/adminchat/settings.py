@@ -121,7 +121,7 @@ WSGI_APPLICATION = "adminchat.wsgi.application"
 # Configuración de la base de datos
 DATABASES = {
     'default': {
-        'ENGINE': config('DB_ENGINE'),
+        'ENGINE': "django.db.backends.postgresql", 
         'NAME': config('PGDATABASE'),
         'USER': config('PGUSER'),
         'PASSWORD': config('PGPASSWORD'),
