@@ -1,3 +1,4 @@
+#adminchat/Dockerfile
 FROM python:3.11-slim-bullseye
 
 # Establecer variables de entorno para Python
@@ -22,11 +23,17 @@ RUN pip install --no-cache-dir -r requirements.txt gunicorn
 # Copiar el proyecto
 COPY . .
 
-# Crea solo el directorio para static files (sin collectstatic)
-RUN mkdir -p /app/staticfiles
+
+# Crea directorio para static files y recolecta
+RUN mkdir -p /app/staticfiles && \
+    python manage.py collectstatic --noinput
+
+# Configura Nginx para servir static files
+#COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Puerto expuesto
 EXPOSE 8000
 
-# Comando de inicio modificado
-CMD bash -c "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 --workers 4 adminchat.wsgi:application"
+# Comando de inicio
+CMD ["bash", "-c", "python manage.py migrate && \
+     gunicorn --bind 0.0.0.0:8000 --workers 4 --timeout 120 adminchat.wsgi:application"]
