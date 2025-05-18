@@ -4,12 +4,12 @@ FROM nginx:alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # 2. Copiar configuración personalizada
-COPY adminchat/deploy/nginx.conf /etc/nginx/conf.d
+COPY nginx.conf /etc/nginx/conf.d/
 
 # Copiar archivos estáticos (desde Django)
 # 3. Crear directorio para static files y copiarlos
 RUN mkdir -p /app/staticfiles
-COPY ../staticfiles /app/staticfiles
+COPY ../../adminchat/staticfiles /app/staticfiles
 
 # Puerto expuesto (Railway inyectará $PORT)
 # 4. Puerto dinámico para Railway
