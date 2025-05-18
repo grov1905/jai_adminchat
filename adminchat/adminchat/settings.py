@@ -36,7 +36,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-
 DEBUG = config('DEBUG', cast=bool, default=False)
 SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-' + os.urandom(32).hex())
 
@@ -53,7 +52,13 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken'
 ]
 
+#ALLOWED_HOSTS = ["jaiadminchat-production.up.railway.app", "tudominio.com"]
 
+ALLOWED_HOSTS = [
+    "jaiadminchat-production.up.railway.app",  # Dominio de Railway
+    "localhost",                              # Para pruebas locales (opcional)
+    "127.0.0.1"                               # Para pruebas locales (opcional)
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -206,15 +211,6 @@ MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware') """
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
-    "http://adminchat:8000",
-    "https://jaiadminchat-production.up.railway.app",
-
-]
-CORS_EXPOSE_HEADERS = ['authorization']  # Asegura que el header sea accesible
 
 # Configuración de drf-yasg
 SWAGGER_SETTINGS = {
