@@ -22,13 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-(2%e&@lw@+(^1q=3sygas3-a8p=u($8)8$ktpwdgt6lfu9+o=e"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
 
 DEBUG = config('DEBUG', cast=bool, default=False)
-#SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -237,12 +236,12 @@ REDOC_SETTINGS = {
 
 
 # Configuración de S3
-STORAGE_TYPE = config('STORAGE_TYPE', 's3')
-STORAGE_PATH = config('STORAGE_PATH', 's3://jai-docs-storage/documents/')
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_REGION = config('AWS_REGION', 'us-west-2')
-S3_BUCKET = config('S3_BUCKET', 'jai-docs-storage')
+STORAGE_TYPE = os.getenv('STORAGE_TYPE', 's3')
+STORAGE_PATH = os.getenv('STORAGE_PATH', 's3://jai-docs-storage/documents/')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_REGION = os.getenv('AWS_REGION', 'us-west-2')
+S3_BUCKET = os.getenv('S3_BUCKET', 'jai-docs-storage')
 
 # Configuración adicional para S3
 AWS_S3_OBJECT_PARAMETERS = {
