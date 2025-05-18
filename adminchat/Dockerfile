@@ -29,4 +29,4 @@ RUN mkdir -p /app/staticfiles
 EXPOSE 8000
 
 # Comando de inicio modificado
-CMD bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn --bind 0.0.0.0:8000 --workers 4 adminchat.wsgi:application"
+CMD bash -c "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 --workers 4 adminchat.wsgi:application"
