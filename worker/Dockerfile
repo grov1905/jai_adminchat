@@ -5,12 +5,11 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Instala dependencias
-COPY ./worker/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia SOLO lo necesario (ajustado a tu estructura)
-COPY ./worker/adminchat/ /app/adminchat/
-COPY ./worker/manage.py /app/
+COPY . .
 
 # Variables de entorno esenciales (CORREGIDO)
 ENV PYTHONPATH=/app  
