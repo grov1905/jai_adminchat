@@ -34,7 +34,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'adminchat',  # Nombre del servicio en Docker
     'embedder.local',
-    'host.docker.internal',  # Otro servicio si es necesario
+    'host.docker.internal', 
+    'https://jaiadminchat-production.up.railway.app', # Otro servicio si es necesario
     # Agrega aquí cualquier otro host que necesites
 ]
 
@@ -192,6 +193,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "http://adminchat:8000",
+    "https://jaiadminchat-production.up.railway.app",
 ]
 CORS_EXPOSE_HEADERS = ['authorization']  # Asegura que el header sea accesible
 
