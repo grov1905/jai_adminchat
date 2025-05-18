@@ -9,7 +9,7 @@ COPY adminchat/deploy/nginx.conf /etc/nginx/conf.d
 # Copiar archivos estáticos (desde Django)
 # 3. Crear directorio para static files y copiarlos
 RUN mkdir -p /app/staticfiles
-COPY ./adminchat/staticfiles /app/staticfiles  
+COPY ../staticfiles /app/staticfiles
 
 # Puerto expuesto (Railway inyectará $PORT)
 # 4. Puerto dinámico para Railway
