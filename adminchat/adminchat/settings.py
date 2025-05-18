@@ -25,18 +25,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
+# Añade al inicio de tu settings.py (después de los imports)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://jaiadminchat-production.up.railway.app',
+    'http://localhost:3000'
+]
+
+
 
 DEBUG = config('DEBUG', cast=bool, default=False)
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-' + os.urandom(32).hex())
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'adminchat',  # Nombre del servicio en Docker
-    'embedder.local',
-    'host.docker.internal', 
-    'https://jaiadminchat-production.up.railway.app', # Otro servicio si es necesario
-    # Agrega aquí cualquier otro host que necesites
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "https://jaiadminchat-production.up.railway.app"
+]
+
+CORS_ALLOW_HEADERS = [
+    'authorization',
+    'content-type',
+    'x-csrftoken'
 ]
 
 
@@ -75,16 +89,20 @@ from datetime import timedelta
 
 # Añade estas configuraciones
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
+    'AUTH_HEADER_TYPES': ('Bearer'),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',  # Acepta headers en mayúsculas
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
 AUTH_USER_MODEL = 'adminchat.BusinessUser'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Añade esto
     "django.contrib.sessions.middleware.SessionMiddleware",
     'corsheaders.middleware.CorsMiddleware',  # Debe estar antes de CommonMiddleware
     "django.middleware.common.CommonMiddleware",
