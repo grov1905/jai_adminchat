@@ -194,6 +194,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://adminchat:8000",
     "https://jaiadminchat-production.up.railway.app",
+
 ]
 CORS_EXPOSE_HEADERS = ['authorization']  # Asegura que el header sea accesible
 
