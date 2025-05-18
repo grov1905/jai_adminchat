@@ -102,7 +102,7 @@ AUTH_USER_MODEL = 'adminchat.BusinessUser'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Añade esto
+#    'whitenoise.middleware.WhiteNoiseMiddleware',  # Añade esto
     "django.contrib.sessions.middleware.SessionMiddleware",
     'corsheaders.middleware.CorsMiddleware',  # Debe estar antes de CommonMiddleware
     "django.middleware.common.CommonMiddleware",
