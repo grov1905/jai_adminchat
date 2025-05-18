@@ -29,7 +29,7 @@ RUN mkdir -p /app/staticfiles && \
     python manage.py collectstatic --noinput
 
 # Configura Nginx para servir static files
-#COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
+COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Puerto expuesto
 EXPOSE 8000
