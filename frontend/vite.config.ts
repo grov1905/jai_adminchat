@@ -5,6 +5,7 @@ import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
+  base: '/',
   plugins: [react()],  // ✅ Imprescindible para React
   server: {
     open: '/public/index.html',  // ✅ Opcional (abre automáticamente el navegador)
@@ -22,8 +23,9 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: {
-        main: './index.html'
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        entryFileNames: 'assets/[name]-[hash].js'
       }
     }
   }
