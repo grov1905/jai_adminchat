@@ -127,7 +127,7 @@ DATABASES = {
         'USER': os.getenv('PGUSER'),
         'PASSWORD': os.getenv('PGPASSWORD'),
         'HOST': os.getenv('PGHOST', default='localhost'),
-        'PORT': os.getenv('PGPORT', default='5432', cast=int),
+        'PORT': '5432',
         'OPTIONS': {
             'client_encoding': 'UTF8',
         },
