@@ -148,8 +148,9 @@ class EmbeddingGenerator:
 
         try:
             # URL del servicio de embeddings (ajustar según configuración)
-            embedding_service_url = "http://embedder.local:8000/api/v1/embeddings/generate"
-            
+            url=settings.URL_EMBEDDING
+            #embedding_service_url = "http://embedder.local:8000/api/v1/embeddings/generate"
+            embedding_service_url = F"{url}/api/v1/embeddings/generate"
             payload = {
                 "texts": texts, 
                 "embedding_model": embedding_model,
