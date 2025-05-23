@@ -76,7 +76,7 @@ class BusinessViewSet(viewsets.ModelViewSet):
     serializer_class = BusinessSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_active']
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
 
     @swagger_auto_schema(
