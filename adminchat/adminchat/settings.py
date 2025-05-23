@@ -45,7 +45,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://jaiadminchat-production.up.railway.app",
     "https://jai-adminchat.vercel.app",
-    "http://localhost:3001"
+    "http://localhost:3001",
     "https://www.jaiexperts.com"
 ]
 
