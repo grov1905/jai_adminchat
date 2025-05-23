@@ -81,8 +81,7 @@ def create_embeddings_task(self, business_id, source_type, source_id):
         print('inicio embedding')
         embeddings = EmbeddingGenerator.generate_embeddings(
             chunks,
-            bot_settings['embedding_model_name'],
-            bot_settings['embedding_dim']
+            bot_settings['embedding_model_name']
         )
         print('embedding finalizo')
         

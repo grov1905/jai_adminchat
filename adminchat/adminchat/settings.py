@@ -44,7 +44,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "https://jaiadminchat-production.up.railway.app",
-    "https://jai-adminchat.vercel.app"
+    "https://jai-adminchat.vercel.app",
+    "http://localhost:3001"
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -55,11 +56,13 @@ CORS_ALLOW_HEADERS = [
 
 #ALLOWED_HOSTS = ["jaiadminchat-production.up.railway.app", "tudominio.com"]
 
-ALLOWED_HOSTS = [
+""" ALLOWED_HOSTS = [
     "jaiadminchat-production.up.railway.app",  # Dominio de Railway
     "localhost",                              # Para pruebas locales (opcional)
     "127.0.0.1"                               # Para pruebas locales (opcional)
-]
+    "host.docker.internal"
+] """
+ALLOWED_HOSTS = ['*'] 
 # Application definition
 
 INSTALLED_APPS = [
@@ -150,7 +153,7 @@ DATABASES = {
         'NAME': os.getenv('PGDATABASE'),
         'USER': os.getenv('PGUSER'),
         'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST', default='localhost'),
+        'HOST': os.getenv('PGHOST'),
         'PORT': '5432',
         'OPTIONS': {
             'client_encoding': 'UTF8',

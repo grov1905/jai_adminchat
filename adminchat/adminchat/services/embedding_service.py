@@ -141,11 +141,9 @@ class EmbeddingGenerator:
     """Clase para generar embeddings llamando al servicio externo"""
     
     @staticmethod
-    def generate_embeddings(texts: list, embedding_model: str, embedding_dim: int) -> list:
+    def generate_embeddings(texts: list, embedding_model: str) -> list:
         """Llama al servicio de embeddings para vectorizar los textos"""
         print(f'embedding_model: {embedding_model}')
-        print(f'embedding_dim: {embedding_dim}')
-
         try:
             # URL del servicio de embeddings (ajustar según configuración)
             url=settings.URL_EMBEDDING
@@ -153,9 +151,7 @@ class EmbeddingGenerator:
             embedding_service_url = F"{url}/api/v1/embeddings/generate"
             payload = {
                 "texts": texts, 
-                "embedding_model": embedding_model,
-                "embedding_dim": embedding_dim
-            }
+                "embedding_model": embedding_model            }
             
             response = requests.post(embedding_service_url, json=payload)
             response.raise_for_status()
