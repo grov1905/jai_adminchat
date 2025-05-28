@@ -4,9 +4,9 @@ services:
     image: ankane/pgvector:v0.5.1  # Versión optimizada para ARM
     platform: linux/arm64
     environment:
-      POSTGRES_USER: ${PGUSER}
-      POSTGRES_PASSWORD: ${PGPASSWORD}
-      POSTGRES_DB: ${PGDATABASE}
+      - POSTGRES_USER=${PGUSER}
+      - POSTGRES_PASSWORD=${PGPASSWORD}
+      - POSTGRES_DB=${PGDATABASE}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${PGUSER} -d ${PGDATABASE}"]
       interval: 5s
@@ -69,13 +69,6 @@ services:
     hostname: embedder.local 
     env_file:
       - .env  # Comparte las mismas variables de entorno
-    environment:
-      - PGHOST=db  # Usa el servicio db definido en tu compose
-      - PGPORT=5432
-      - PGUSER=${PGUSER}
-      - PGPASSWORD=${PGPASSWORD}
-      - PGDATABASE=${PGDATABASE}
-      - EMBEDDING_MODEL=BAAI/bge-large-en
     ports:
       - "8001:8000"  # Expone en un puerto diferente
     depends_on:
@@ -96,7 +89,6 @@ services:
       resources:
         limits:
           memory: 2G  # Ajusta según necesidades
-
   redis:  # Servicio de Redis (requerido para Celery)
     image: redis:7-alpine
     ports:
@@ -108,13 +100,15 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+
+
   celery_worker:
     build:
       context: .
       dockerfile: worker/Dockerfile
-    command: >
-      bash -c "sleep 5 &&  
-      celery -A adminchat.celery worker --loglevel=info"
+#    command: >
+#      bash -c "sleep 5 &&  
+#      celery -A adminchat.celery worker --loglevel=info"
     env_file:
       - .env
     depends_on:
@@ -124,15 +118,14 @@ services:
         condition: service_healthy
     networks:
       - chat-network
-    environment:
-      - DJANGO_SETTINGS_MODULE=adminchat.settings
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - PYTHONPATH=/app  # Asegúrate que esté definido
-    volumes:
-      - ./adminchat/adminchat:/app/adminchat  # Monta solo el módulo Python
-      - ./adminchat/manage.py:/app/manage.py  # Monta manage.py
+#    environment:
+#      - DJANGO_SETTINGS_MODULE=adminchat.settings
+#      - CELERY_BROKER_URL=redis://redis:6379/0
+#      - PYTHONPATH=/app  # Asegúrate que esté definido
+#    volumes:
+#      - ./adminchat/adminchat:/app/adminchat  # Monta solo el módulo Python
+#      - ./adminchat/manage.py:/app/manage.py  # Monta manage.py
     restart: unless-stopped
-
 
 networks:
   chat-network:
@@ -159,3 +152,7 @@ volumes:
 #    volumes:
 #      - ./frontend:/app
 #      - /app/node_modules  # Evita sobrescribir node_modules
+
+
+
+

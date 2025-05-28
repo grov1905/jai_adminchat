@@ -272,4 +272,9 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_DEFAULT_ACL = 'private'
 
 #Api embedding
-URL_EMBEDDING= os.getenv('URL_EMBEDDING', 'http;//localhost:8080')
+
+URL_EMBEDDING= os.getenv('URL_EMBEDDING', 'http://localhost')
+print(f'url embedding: {URL_EMBEDDING}')
+
+CELERY_RESULT_SERIALIZER = 'json'  # Asegura usar JSON
+CELERY_ACCEPT_CONTENT = ['json']

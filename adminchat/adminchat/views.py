@@ -1304,3 +1304,5 @@ class TaskStatusView(APIView):
             'result': task_result.result if task_result.ready() else None,
             'status': task_result.status
         })
+
+

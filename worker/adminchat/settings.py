@@ -36,7 +36,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-
 DEBUG = config('DEBUG', cast=bool, default=False)
 SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-' + os.urandom(32).hex())
 
@@ -44,7 +43,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
-    "https://jaiadminchat-production.up.railway.app"
+    "https://jaiadminchat-production.up.railway.app",
+    "https://jai-adminchat.vercel.app",
+    "http://localhost:3001",
+    "https://www.jaiexperts.com"
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -53,7 +55,15 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken'
 ]
 
+#ALLOWED_HOSTS = ["jaiadminchat-production.up.railway.app", "tudominio.com"]
 
+""" ALLOWED_HOSTS = [
+    "jaiadminchat-production.up.railway.app",  # Dominio de Railway
+    "localhost",                              # Para pruebas locales (opcional)
+    "127.0.0.1"                               # Para pruebas locales (opcional)
+    "host.docker.internal"
+] """
+ALLOWED_HOSTS = ['*'] 
 # Application definition
 
 INSTALLED_APPS = [
@@ -144,7 +154,7 @@ DATABASES = {
         'NAME': os.getenv('PGDATABASE'),
         'USER': os.getenv('PGUSER'),
         'PASSWORD': os.getenv('PGPASSWORD'),
-        'HOST': os.getenv('PGHOST', default='localhost'),
+        'HOST': os.getenv('PGHOST'),
         'PORT': '5432',
         'OPTIONS': {
             'client_encoding': 'UTF8',
@@ -206,15 +216,6 @@ MIDDLEWARE.insert(2, 'corsheaders.middleware.CorsMiddleware') """
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
-    "http://adminchat:8000",
-    "https://jaiadminchat-production.up.railway.app",
-
-]
-CORS_EXPOSE_HEADERS = ['authorization']  # Asegura que el header sea accesible
 
 # Configuración de drf-yasg
 SWAGGER_SETTINGS = {
@@ -271,4 +272,9 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_DEFAULT_ACL = 'private'
 
 #Api embedding
-URL_EMBEDDING= os.getenv('URL_EMBEDDING', 'http;//localhost:8080')
+
+URL_EMBEDDING= os.getenv('URL_EMBEDDING', 'http://localhost')
+print(f'url embedding: {URL_EMBEDDING}')
+
+CELERY_RESULT_SERIALIZER = 'json'  # Asegura usar JSON
+CELERY_ACCEPT_CONTENT = ['json']

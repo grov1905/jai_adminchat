@@ -1,3 +1,4 @@
+// src/pages/Admin/BotTemplates/[id].tsx
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getBotTemplate, updateBotTemplate, createBotTemplate } from '../../../api/admin/botTemplates';
