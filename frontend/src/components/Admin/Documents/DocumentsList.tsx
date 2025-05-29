@@ -5,7 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { createEmbedding } from '../../../api/admin/embeddings';
-import VectorizationModal from './VectorizationModal';
+import VectorizationModal from '../Modal/VectorizationModal';
 
 interface DocumentsListProps {
   documents: Document[];
