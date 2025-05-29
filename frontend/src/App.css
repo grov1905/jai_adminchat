@@ -1,17 +1,252 @@
-/* App.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Estilos globales mínimos */
+/* Reset y estilos base mejorados */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Elimina todos los estilos del #root que puedan interferir */
 #root {
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos responsive para contenedores principales */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 3rem;
+  }
+}
+
+/* Utilidades responsive personalizadas */
+.responsive-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Cards responsive */
+.responsive-card {
+  @apply bg-white rounded-lg shadow-sm border border-gray-200 p-4;
+  transition: all 0.2s ease-in-out;
+}
+
+@media (min-width: 768px) {
+  .responsive-card {
+    @apply p-6;
+  }
+}
+
+.responsive-card:hover {
+  @apply shadow-md;
+  transform: translateY(-2px);
+}
+
+/* Botones responsive */
+.btn-responsive {
+  @apply px-4 py-2 text-sm font-medium rounded-md transition-all duration-200;
+  min-height: 44px; /* Tamaño mínimo para touch en móviles */
+}
+
+@media (min-width: 768px) {
+  .btn-responsive {
+    @apply px-6 py-3 text-base;
+    min-height: auto;
+  }
+}
+
+/* Inputs responsive */
+.input-responsive {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base;
+  min-height: 44px; /* Tamaño mínimo para touch */
+}
+
+@media (min-width: 768px) {
+  .input-responsive {
+    @apply text-sm;
+    min-height: auto;
+  }
+}
+
+/* Navegación responsive */
+.nav-responsive {
+  @apply flex flex-col space-y-2;
+}
+
+@media (min-width: 768px) {
+  .nav-responsive {
+    @apply flex-row space-y-0 space-x-4;
+  }
+}
+
+/* Texto responsive */
+.text-responsive {
+  @apply text-sm;
+}
+
+@media (min-width: 768px) {
+  .text-responsive {
+    @apply text-base;
+  }
+}
+
+.heading-responsive {
+  @apply text-xl font-bold;
+}
+
+@media (min-width: 768px) {
+  .heading-responsive {
+    @apply text-2xl;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heading-responsive {
+    @apply text-3xl;
+  }
+}
+
+/* Espaciado responsive */
+.spacing-responsive {
+  @apply space-y-4;
+}
+
+@media (min-width: 768px) {
+  .spacing-responsive {
+    @apply space-y-6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .spacing-responsive {
+    @apply space-y-8;
+  }
+}
+
+/* Utilidades para ocultar/mostrar en diferentes breakpoints */
+.mobile-only {
+  @apply block;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    @apply hidden;
+  }
+}
+
+.tablet-up {
+  @apply hidden;
+}
+
+@media (min-width: 768px) {
+  .tablet-up {
+    @apply block;
+  }
+}
+
+.desktop-only {
+  @apply hidden;
+}
+
+@media (min-width: 1024px) {
+  .desktop-only {
+    @apply block;
+  }
+}
+
+/* Scroll horizontal para tablas en móviles */
+.table-responsive {
+  @apply overflow-x-auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f7fafc;
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* Animaciones suaves */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mejoras para touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .hover\:shadow-md:hover {
+    box-shadow: none;
+  }
+  
+  .hover\:bg-gray-50:hover {
+    background-color: inherit;
+  }
+  
+  /* Aumentar área de touch para elementos pequeños */
+  button, a, input[type="checkbox"], input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
