@@ -32,7 +32,7 @@ class BotSettingsService:
                 f"No se encontró configuración para business_id={business_id}, "
             )
             return {
-                'chunk_size': cls.EMBEDDING_MODEL_NAME,
-                'chunk_overlap': cls.EMBEDDING_DIM,
+                'embedding_model_name': cls.EMBEDDING_MODEL_NAME,
+                'embedding_dim': cls.EMBEDDING_DIM,
                 'is_default': True
             }

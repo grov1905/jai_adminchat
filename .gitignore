@@ -43,3 +43,10 @@ build/
 dist/
 out/
 .next/
+
+
+*.tmp
+*.md
+.git
+.env
+node_modules

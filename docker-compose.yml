@@ -69,6 +69,7 @@ services:
     hostname: embedder.local 
     env_file:
       - .env  # Comparte las mismas variables de entorno
+      
     ports:
       - "8001:8000"  # Expone en un puerto diferente
     depends_on:
