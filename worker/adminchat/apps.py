@@ -5,6 +5,6 @@ class BusinessConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'adminchat'
 
-    def ready(self):
+"""     def ready(self):
         # Importa y registra las señales
-        from . import signals
+        from . import signals """
